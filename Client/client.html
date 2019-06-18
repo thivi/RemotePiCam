@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Take Remote Pictures!</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+        <script type="text/javascript">
+            var socket=io("http://localhost:5000/camera");
+            var picture;
+            function requestPicture(){
+                document.getElementById("image").style.display="none";
+
+                document.getElementById("loader").style.display="block";
+
+                console.log("Take picture");
+                socket.emit('take','picture',(pic)=>{
+                    picture=pic;
+                    console.log(picture);
+                    document.getElementById("image").style.display="block"
+                    document.getElementById("image").src="data:image/jpg;base64,"+picture;
+                    document.getElementById("loader").style.display="none";
+                });
+            }
+        </script>
+    </head>
+    <body style="margin:0;padding:50px; background-color: #0ac2c221; display:flex; justify-content: space-between; flex-direction: column; align-items: center;">
+        <button style="background-color: #0ac2c2; border:none; border-radius: 5px; color:white; font-weight:bold; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:1.1em; padding:10x; height:40px; cursor:pointer" onclick="requestPicture()">Take a Picture!</button>
+        <div style="flex-grow: 2; margin-top: 30px; display:flex; align-items: center;">
+            <div style="width:auto;height: 500px; overflow: hidden;" class="picture"><img id="image" src=""/> </div>
+            <div style="display:none" id="loader"><img style="height:100px; width:100px;" src="ajax-loader.gif"</div>
+        </div>
+    </body>
+</html>
